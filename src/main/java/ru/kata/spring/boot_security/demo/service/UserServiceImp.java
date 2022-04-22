@@ -1,0 +1,78 @@
+package ru.kata.spring.boot_security.demo.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.repository.RoleRepository;
+import ru.kata.spring.boot_security.demo.repository.UserRepository;
+
+import java.util.List;
+
+@Service
+public class UserServiceImp implements UserService, UserDetailsService {
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public UserServiceImp (UserRepository userRepository, PasswordEncoder passwordEncoder){
+        this.userRepository=userRepository;
+        this.passwordEncoder=passwordEncoder;
+    }
+
+    @Override
+    public List<User> allUsers() {
+        return (List<User>) userRepository.findAll();
+    }
+
+    @Override
+    public void add(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+    }
+
+    @Override
+    public void delete(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    @Override
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public void update(User user) {
+        String passwordFromForm = user.getPassword();
+        String encodedPasswordFromBase = userRepository.getById(user.getId()).getPassword();
+        if(passwordFromForm.equals(encodedPasswordFromBase)) {
+            user.setPassword(encodedPasswordFromBase);
+        } else {
+            if(passwordEncoder.matches(passwordFromForm, encodedPasswordFromBase)){
+                user.setPassword(encodedPasswordFromBase);
+            } else {
+                user.setPassword(passwordEncoder.encode(passwordFromForm));
+            }
+        }
+        userRepository.save(user);
+    }
+
+    @Override
+    public User getUserByName(String name) {
+        return userRepository.findUserByName(name);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
+        UserDetails user = userRepository.findUserByName(name);
+        if (user == null) {
+            throw new UsernameNotFoundException("Couldn't find user by this name");
+        }
+        return user;
+    }
+    }
+

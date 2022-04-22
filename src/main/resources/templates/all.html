@@ -1,0 +1,40 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>all</title>
+    <style>table th, table td {
+        padding: 5px;
+    }</style>
+</head>
+<body>
+<h1>Welcome to ALL Stars store</h1>
+<h2>Our clients</h2>
+<table border="1">
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Size</th>
+        <th>Favourite brand</th>
+        <th>Change</th>
+
+    </tr>
+    <tr th:each="cl: ${list}">
+        <td th:utext="${cl.id}">id</td>
+        <td th:utext="${cl.name}">name</td>
+        <td th:utext="${cl.size}">size</td>
+        <td th:utext="${cl.brand}">brand</td>
+        <td><a th:href="@{/admin/edit(id=${cl.id})}">edit</a>
+            <form th:method="DELETE" th:action="@{/admin/delete(id=${cl.id})}">
+                <input type="submit" value="Delete"/>
+            </form>
+        </td>
+
+    </tr>
+</table>
+<a href="admin/new">Add a client</a>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Sign Out"/>
+</form>
+</body>
+</html>
