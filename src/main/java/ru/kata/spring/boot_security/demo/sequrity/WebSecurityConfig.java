@@ -1,4 +1,4 @@
-package ru.kata.spring.boot_security.demo.configs;
+package ru.kata.spring.boot_security.demo.sequrity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -41,8 +41,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                     .antMatchers("/", "/index").permitAll()
-                    .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                     .antMatchers("/user").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+                    .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                     .and()
                 .formLogin().successHandler(successUserHandler);
 

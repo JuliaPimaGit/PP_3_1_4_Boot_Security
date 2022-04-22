@@ -1,4 +1,4 @@
-package ru.kata.spring.boot_security.demo.configs;
+package ru.kata.spring.boot_security.demo.sequrity;
 
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 
