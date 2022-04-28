@@ -17,7 +17,6 @@ public interface UserService {
 
     User getUserByName(String name);
 
-    void changeUser( Long[] selectedRoleId, User user);
-    void saveNewUser(Long[] selectedRoleId, User user);
+
 }
 

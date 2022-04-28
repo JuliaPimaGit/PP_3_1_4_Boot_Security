@@ -7,10 +7,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 import java.util.List;
+
 
 @Transactional
 @Service
@@ -18,13 +20,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final RoleService roleService;
+
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleService roleService) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.roleService = roleService;
+
     }
 
     @Override
@@ -36,6 +38,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public void add(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
+
     }
 
     @Override
@@ -69,35 +72,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.findUserByName(name);
     }
 
-    @Override
-    public void changeUser(Long[] selectedRoleId, User user) {
-        if (selectedRoleId == null) {
-            user.setOneRole(roleService.getRoleByRole("ROLE_USER"));
-            update(user);
-        } else {
-            for (Long a : selectedRoleId) {
-                if (a != null) {
-                    user.setOneRole(roleService.getRoleByID(a));
-                    update(user);
-                }
-            }
-        }
-    }
-
-    @Override
-    public void saveNewUser(Long[] selectedRoleId, User user) {
-        if (selectedRoleId == null) {
-            user.setOneRole(roleService.getRoleByRole("ROLE_USER"));
-           add(user);
-        } else {
-            for (Long a : selectedRoleId) {
-                if (a != null) {
-                    user.setOneRole(roleService.getRoleByID(a));
-                    add(user);
-                }
-            }
-        }
-    }
 
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {

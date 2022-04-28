@@ -7,9 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
+
+import java.util.Set;
 
 
 @Controller
@@ -51,8 +54,9 @@ public class UserController {
     }
 
     @PostMapping("/admin/edit")
-    public String saveEditUser(@ModelAttribute User user, @RequestParam(value = "checked", required = false) Long[] selectedRoleId) {
-        userService.changeUser(selectedRoleId, user);
+    public String saveEditUser(@ModelAttribute User user, @RequestParam("checked") Set<Role> roles) {
+        user.setRoles(roles);
+        userService.update(user);
         return "redirect:/admin";
     }
 
@@ -64,8 +68,9 @@ public class UserController {
     }
 
     @PostMapping("/admin/new")
-    public String saveUser(@ModelAttribute User user, @RequestParam(value = "checked", required = false) Long[] selectedRoleId) {
-        userService.saveNewUser(selectedRoleId, user);
+    public String saveUser(@ModelAttribute User user, @RequestParam("checked") Set<Role> roles) {
+        user.setRoles(roles);
+        userService.add(user);
         return "redirect:/admin";
     }
 
