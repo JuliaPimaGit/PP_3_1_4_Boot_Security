@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @GetMapping("/")
-    public String helloPage(){
+    public String helloPage() {
         return "index";
     }
 
@@ -37,9 +37,10 @@ public class UserController {
     }
 
     @GetMapping("/admin")
-    public String adminPage(Model model){
+    public String adminPage(Model model) {
         model.addAttribute("list", userService.allUsers());
-        return "all";}
+        return "all";
+    }
 
 
     @GetMapping("admin/edit")
@@ -50,18 +51,8 @@ public class UserController {
     }
 
     @PostMapping("/admin/edit")
-    public String saveEditUser(@RequestParam(value ="id") Long id,@ModelAttribute User user, @RequestParam(value = "checked", required = false ) Long[] checked){
-        if (checked == null) {
-            user.setOneRole(roleService.getRoleByRole("ROLE_USER"));
-            userService.update(user);
-        } else {
-            for (Long a : checked) {
-                if (a != null) {
-                    user.setOneRole(roleService.getRoleByID(a));
-                    userService.update(user);
-                }
-            }
-        }
+    public String saveEditUser(@ModelAttribute User user, @RequestParam(value = "checked", required = false) Long[] selectedRoleId) {
+        userService.changeUser(selectedRoleId, user);
         return "redirect:/admin";
     }
 
@@ -71,19 +62,10 @@ public class UserController {
         model.addAttribute("roles", roleService.getAllRoles());
         return "new";
     }
+
     @PostMapping("/admin/new")
-    public String saveUser(@ModelAttribute User user,@RequestParam(value = "checked", required = false) Long[] checked){
-        if (checked == null) {
-            user.setOneRole(roleService.getRoleByRole("ROLE_USER"));
-            userService.add(user);
-        } else {
-            for (Long a : checked) {
-                if (a != null) {
-                    user.setOneRole(roleService.getRoleByID(a));
-                    userService.add(user);
-                }
-            }
-        }
+    public String saveUser(@ModelAttribute User user, @RequestParam(value = "checked", required = false) Long[] selectedRoleId) {
+        userService.saveNewUser(selectedRoleId, user);
         return "redirect:/admin";
     }
 

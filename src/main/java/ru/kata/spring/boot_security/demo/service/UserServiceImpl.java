@@ -6,22 +6,25 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 import java.util.List;
 
+@Transactional
 @Service
-public class UserServiceImp implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleService roleService;
 
     @Autowired
-    public UserServiceImp (UserRepository userRepository, PasswordEncoder passwordEncoder){
-        this.userRepository=userRepository;
-        this.passwordEncoder=passwordEncoder;
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleService roleService) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.roleService = roleService;
     }
 
     @Override
@@ -49,10 +52,10 @@ public class UserServiceImp implements UserService, UserDetailsService {
     public void update(User user) {
         String passwordFromForm = user.getPassword();
         String encodedPasswordFromBase = userRepository.getById(user.getId()).getPassword();
-        if(passwordFromForm.equals(encodedPasswordFromBase)) {
+        if (passwordFromForm.equals(encodedPasswordFromBase)) {
             user.setPassword(encodedPasswordFromBase);
         } else {
-            if(passwordEncoder.matches(passwordFromForm, encodedPasswordFromBase)){
+            if (passwordEncoder.matches(passwordFromForm, encodedPasswordFromBase)) {
                 user.setPassword(encodedPasswordFromBase);
             } else {
                 user.setPassword(passwordEncoder.encode(passwordFromForm));
@@ -67,6 +70,36 @@ public class UserServiceImp implements UserService, UserDetailsService {
     }
 
     @Override
+    public void changeUser(Long[] selectedRoleId, User user) {
+        if (selectedRoleId == null) {
+            user.setOneRole(roleService.getRoleByRole("ROLE_USER"));
+            update(user);
+        } else {
+            for (Long a : selectedRoleId) {
+                if (a != null) {
+                    user.setOneRole(roleService.getRoleByID(a));
+                    update(user);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void saveNewUser(Long[] selectedRoleId, User user) {
+        if (selectedRoleId == null) {
+            user.setOneRole(roleService.getRoleByRole("ROLE_USER"));
+           add(user);
+        } else {
+            for (Long a : selectedRoleId) {
+                if (a != null) {
+                    user.setOneRole(roleService.getRoleByID(a));
+                    add(user);
+                }
+            }
+        }
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
         UserDetails user = userRepository.findUserByName(name);
         if (user == null) {
@@ -74,5 +107,5 @@ public class UserServiceImp implements UserService, UserDetailsService {
         }
         return user;
     }
-    }
+}
 
