@@ -23,9 +23,9 @@ public class DataClass {
 
     @PostConstruct
     private void startDB() {
-        User user = new User("user", 50, "Puma", "user");
-        User admin = new User("admin", 0, "0", "admin");
-        User userAdmin = new User("userAdmin", 1, "1", "userAdmin");
+        User user = new User("user", "111", 20, "user@mail.ru", "user");
+        User admin = new User("admin", "222", 30,"admin@mail.ru", "admin");
+        User userAdmin = new User("userAdmin", "333", 45, "userAdmin@mail.ru", "userAdmin");
         Role userRole = new Role("ROLE_USER");
         Role adminRole = new Role("ROLE_ADMIN");
         Set<Role> userAdminRole = new HashSet<Role>();

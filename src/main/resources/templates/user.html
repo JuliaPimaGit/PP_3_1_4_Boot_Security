@@ -1,19 +1,93 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
 <head>
-    <title>Spring Security Example</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>User</title>
+
 </head>
 <body>
-<h1>User, welcome!</h1>
-<p th:text="'Name: ' + ${user.getName()}">NAME</p>
-<p th:text="'Id: ' + ${user.getId()}">ID</p>
-<p th:text="'Size : ' + ${user.getSize()}">SIZE</p>
-<p th:text="'Brand : ' + ${user.getBrand()}">BRAND</p>
-<br>
-<form th:action="@{/logout}" method="post">
-    <input type="submit" value="Sign Out"/>
-</form>
-<br>
-<a href="/">Welcome to our store</a>
+<nav class="navbar navbar-dark bg-dark fixed-top">
+    <form class="form-inline">
+        <span class="navbar-text text-white" th:text="${user.email}"></span>
+        <span class="navbar-text text-white">&nbsp with role:&nbsp </span>
+        <span class="navbar-text text-white"><a th:each="role: ${user.getRoles()}"
+                                                th:text="${role.role}+' '"></a></span>
+    </form>
+    <ul class="navbar-nav float-lg-end">
+        <li class="nav-item">
+            <a class="nav-link text-muted " th:href="@{/logout}">Logout</a>
+        </li>
+    </ul>
+</nav>
+<div class="container-fluid bg-light">
+    <div class="row">
+        <div class="col-sm-2 bg-white min-vh-100">
+            <ul class="nav nav-pills flex-column">
+                </br>
+                </br>
+                </br>
+                </br>
+                <div sec:authorize="hasRole('ROLE_ADMIN')">
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/admin}">Admin</a>
+                    </li>
+                </div>
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/user}">User</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-sm-10 bg-light"><br><br><br>
+            <h2>USER information-page</h2>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col border bg-light">
+                        <p><h6>About user</h6></p>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col border bg-white">
+                        <br/>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Age</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td th:utext="${user.id}"></td>
+                                <td th:utext="${user.firstName}"></td>
+                                <td th:utext="${user.lastName}"></td>
+                                <td th:utext="${user.age}"></td>
+                                <td th:utext="${user.email}"></td>
+                                <td><a th:each="role: ${user.roles}" th:text="${role.role} + ' '"></a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"-->
+<!--        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"-->
+<!--        crossorigin="anonymous"></script>-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"-->
+<!--        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"-->
+<!--        crossorigin="anonymous"></script>-->
+<!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"-->
+<!--        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"-->
+<!--        crossorigin="anonymous"></script>-->
 </body>
 </html>

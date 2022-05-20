@@ -18,13 +18,24 @@ public class User implements UserDetails {
     private Long id;
 
     @Column
-    private String name;
+    private String firstName;
 
     @Column
-    private int size;
+    private String lastName;
 
     @Column
-    private String brand;
+    private int age;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Column
+    private String email;
 
     public void setPassword(String password) {
         this.password = password;
@@ -46,14 +57,15 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set <Role> roles;
 
-    public User(String name, int size, String brand, String password) {
-        this.name = name;
-        this.size = size;
-        this.brand = brand;
+    public User(String firstName, String lastName, int age, String email, String password) {
+        this.firstName = firstName;
+        this.age = age;
+        this.lastName = lastName;
+        this.email=email;
         this.password = password;
     }
-    public User(String name, int size, String brand, String password, Set<Role> roles) {
-        this(name, size, brand, password);
+    public User(String firstName, String lastName, int age, String email, String password, Set<Role> roles) {
+        this(firstName, lastName, age, email, password);
         this.roles = roles;
     }
 
@@ -68,28 +80,28 @@ public class User implements UserDetails {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public int getSize() {
-        return size;
+    public int getAge() {
+        return age;
     }
 
-    public void setSize(int size) {
-        this.size = size;
+    public void setAge(int age) {
+        this.age = age;
     }
 
-    public String getBrand() {
-        return brand;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setBrand(String brand) {
-        this.brand = brand;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public void setOneRole(Role role) {
@@ -111,7 +123,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return name;
+        return firstName;
     }
 
     @Override
