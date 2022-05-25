@@ -17,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.templateresolver.ITemplateResolver;
 
 @Configuration
 @ComponentScan("ru.kata.spring.boot_security.demo")
@@ -64,6 +66,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
+
+
     // аутентификация inMemory
 //    @Bean
 //    @Override
