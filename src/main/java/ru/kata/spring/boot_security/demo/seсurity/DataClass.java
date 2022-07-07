@@ -28,17 +28,22 @@ public class DataClass {
         User userAdmin = new User("userAdmin", "333", 45, "userAdmin@mail.ru", "userAdmin");
         Role userRole = new Role("ROLE_USER");
         Role adminRole = new Role("ROLE_ADMIN");
-        Set<Role> userAdminRole = new HashSet<Role>();
-        userAdminRole.add(adminRole);
-        userAdminRole.add(userRole);
+//        Set<Role> userAdminRole = new HashSet<Role>();
+//        userAdminRole.add(adminRole);
+//        userAdminRole.add(userRole);
+//        roleService.addRole(userRole);
+//        roleService.addRole(adminRole);
+//        user.setOneRole(userRole);
+//        admin.setOneRole(adminRole);
+//        userAdmin.setRoles(userAdminRole);
+//        userService.add(user);
+//        userService.add(admin);
+//        userService.add(userAdmin);
         roleService.addRole(userRole);
         roleService.addRole(adminRole);
-        user.setOneRole(userRole);
-        admin.setOneRole(adminRole);
-        userAdmin.setRoles(userAdminRole);
-        userService.add(user);
-        userService.add(admin);
-        userService.add(userAdmin);
+        userService.add(user, new String[]{"ROLE_USER"});
+        userService.add(admin, new String[]{"ROLE_ADMIN"});
+        userService.add(userAdmin, new String[]{"ROLE_ADMIN", "ROLE_USER"});
     }
 }
 

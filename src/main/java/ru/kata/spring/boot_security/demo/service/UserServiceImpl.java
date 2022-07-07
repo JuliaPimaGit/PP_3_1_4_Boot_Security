@@ -8,10 +8,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 import java.util.List;
+import java.util.Set;
 
 
 @Transactional
@@ -20,12 +22,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleService roleService;
 
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleService roleService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.roleService = roleService;
 
     }
 
@@ -35,7 +39,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void add(User user) {
+    public void add(User user,  String[] newRoles) {
+        for (String role : newRoles) {
+            user.setOneRole(roleService.getRoleByRole(role));
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
 
@@ -52,7 +59,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void update(User user) {
+    public void update(User user, String [] editRoles) {
         String passwordFromForm = user.getPassword();
         String encodedPasswordFromBase = userRepository.getById(user.getId()).getPassword();
         if (passwordFromForm.equals(encodedPasswordFromBase)) {
@@ -63,6 +70,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             } else {
                 user.setPassword(passwordEncoder.encode(passwordFromForm));
             }
+        }
+        for (String role : editRoles) {
+            user.setOneRole(roleService.getRoleByRole(role));
         }
         userRepository.save(user);
     }

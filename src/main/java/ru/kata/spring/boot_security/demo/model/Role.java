@@ -6,8 +6,9 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name="roleTable")
+@Table (name="role_table")
 public class Role implements GrantedAuthority {
+
 
     public Long getId() {
         return id;
@@ -32,9 +33,6 @@ public class Role implements GrantedAuthority {
 
     @Column
     private String role;
-
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
 
     public Role (){}
 
