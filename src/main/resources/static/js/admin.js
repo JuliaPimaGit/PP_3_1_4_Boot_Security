@@ -13,8 +13,8 @@ function getUsersTable() {
     <td>${user.age}</td>
     <td>${user.email}</td>
     <td>${user.roles.map(a => a.role)}</td>
-    <td><button type="button" style="background-color: #abd98c" onclick="getEditModal(${user.id})" class="btn btn-info">Edit</button></td>
-    <td><button type="button" style="background-color: #de8118" onclick="getDeleteModal(${user.id})" class="btn btn-danger">Delete</button></td>
+    <td><button type="button" style="background-color: #48b0a5" onclick="getEditModal(${user.id})" class="btn btn-info">Edit</button></td>
+    <td><button type="button" style="background-color: #de182f" onclick="getDeleteModal(${user.id})" class="btn btn-danger">Delete</button></td>
 `
             })
         })
@@ -139,17 +139,87 @@ addUserForm.addEventListener('submit', (e) => {
             password: document.getElementById('nPassword').value,
         })
     })
+        .then(res => res.json())
+        .then(user => {
+            $(`#usersTable tr:last`).after(`<tr id=` + user.id + `>` +
+                `<td>` + user.id + `</td>` +
+                `<td>` + document.getElementById('nFirstName').value + `</td>` +
+                `<td>` + document.getElementById('nLastName').value + `</td>` +
+                `<td>` + document.getElementById('nAge').value + `</td>` +
+                `<td>` + document.getElementById('nEmail').value + `</td>` +
+                `<td>` + newRoles + `</td>` +
+                `<td> <button type="button" onclick="getEditModal(` + user.id + `)" ` +
+                `class="btn btn-info">Edit</button> </td>` +
+                `<td> <button type="button" onclick="getDeleteModal(` + user.id + `)" ` +
+                `class="btn btn-danger">Delete</button> </td>` +
+                `</tr>`);
 
-        .then($('#usersTable tr:last').after('<tr id=' + window.formNewUser.nId.value + '>' +
-            '<td>' + window.formNewUser.nId.value + '</td>' +
-            '<td>' + window.formNewUser.nFirstName.value + '</td>' +
-            '<td>' + window.formNewUser.nLastName.value + '</td>' +
-            '<td>' + window.formNewUser.nAge.value + '</td>' +
-            '<td>' + window.formNewUser.nEmail.value + '</td>' +
-            '<td>' + newRoles + '</td>' +
-            '<td> <button type="button" onclick="getEditModal(' + nid + ')" ' +
-            'class="btn btn-info">Edit</button> </td>' +
-            '<td> <button type="button" onclick="getDeleteModal(' + nid + ')" ' +
-            'class="btn btn-danger">Delete</button> </td>' +
-            '</tr>'))
+            window.formNewUser.nFirstName.value = "";
+            window.formNewUser.nLastName.value = "";
+            window.formNewUser.nAge.value = "";
+            window.formNewUser.nEmail.value = "";
+            window.formNewUser.nPassword.value = "";
+            window.formNewUser.nRoles.value = "";
+
+            // window.open("#user_table")
+        })
 })
+
+
+// .then(data => {
+// let user = {
+//     id: document.getElementById('nId').value,
+//     firstName: document.getElementById('nFirstName').value,
+//     lastName: document.getElementById('nLastName').value,
+//     age: document.getElementById('nAge').value,
+//     email: document.getElementById('nEmail').value,
+//     password: document.getElementById('nPassword').value
+// }
+// user.roles = newRoles;
+
+// addNewRow(user);
+// })
+
+// function addNewRow(user) {
+//     let newTable = document.getElementById("usersTable");
+//     let newRow = document.createElement("tr");
+//     newRow.setAttribute("id", user.id);
+//     let newId = document.createElement("td");
+//     newId.innerHTML = user.id;
+//     let newFN = document.createElement("td");
+//     newFN.innerHTML = user.firstName;
+//     let newLN = document.createElement("td");
+//     newLN.innerHTML = user.lastName;
+//     let newAge = document.createElement("td");
+//     newAge.innerHTML = user.age;
+//     let newEmail = document.createElement("td");
+//     newEmail.innerHTML = user.email;
+//     let newUserRoles = document.createElement("td");
+//     newUserRoles.innerHTML = user.roles
+//
+//     newRow.appendChild(newId);
+//     newRow.appendChild(newFN);
+//     newRow.appendChild(newLN);
+//     newRow.appendChild(newAge);
+//     newRow.appendChild(newEmail);
+//     newRow.appendChild(newUserRoles);
+//     newTable.appendChild(newRow);
+
+
+// //     let newRow = document.querySelector('#usersTable').insertRow();
+//         let newRow = document.createElement("tr");
+//         newRow.setAttribute("id", user.id);
+//         newRow.innerHTML = `<td>${user.id}</td>
+//  <td>${user.firstName}</td>
+//  <td>${user.lastName}</td>
+//  <td>${user.age}</td>
+//  <td>${user.email}</td>
+//  <td>${user.roles.map(a => a.role)}</td>
+//  <td><button type="button" style="background-color: #48b0a5" onclick="getEditModal(${user.id})" class="btn btn-info">Edit</button></td>
+//  <td><button type="button" style="background-color: #de182f" onclick="getDeleteModal(${user.id})" class="btn btn-danger">Delete</button></td>
+//  `
+//     }
+// })
+
+
+

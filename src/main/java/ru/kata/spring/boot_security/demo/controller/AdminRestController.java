@@ -46,9 +46,9 @@ public class AdminRestController {
     }
 
     @PostMapping("/users/add")
-    public ResponseEntity<?> saveUser(@RequestBody User newUser, @RequestParam(name = "roles") String[] newRoles) {
-        userService.add(newUser, newRoles);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public User saveUser(@RequestBody User user, @RequestParam(name = "roles") String[] newRoles) {
+        userService.add(user, newRoles);
+        return user;
     }
 
     @DeleteMapping("/delete/{id}")
